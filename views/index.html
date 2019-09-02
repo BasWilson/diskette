@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>diskette</title>
+</head>
+
+<body>
+    <style>
+        * {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0px;
+            user-select: none;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: row;
+        }
+
+        h1 {
+            margin: 10px;
+            font-weight: lighter;
+        }
+
+        .diskette {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 100% !important;
+        }
+
+        .diskette-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: scroll;
+            margin-bottom: 40px;
+        }
+
+        .diskette-item {
+
+            padding: 15px;
+            margin: 5px 10px;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+        }
+
+        .diskette-upload-item {
+
+            padding: 15px;
+            margin: 5px 0px;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+        }
+
+        .diskette-upload-item:hover {
+            border: 2px solid crimson;
+            cursor: pointer;
+        }
+
+        .selected {
+            border: 2px solid blueviolet;
+        }
+
+        .diskette-item:hover {
+            border: 2px solid blueviolet;
+            cursor: pointer;
+        }
+
+        .inactive:hover {
+            cursor: default;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .inactive {
+            opacity: 0.5;
+        }
+
+        .disabled {
+            opacity: .5;
+            cursor: default !important;
+            color: black !important;
+        }
+
+
+        .margin-bottom {
+            margin-bottom: 20px;
+        }
+
+        .title {
+            overflow-x: scroll;
+            max-width: 100%;
+        }
+
+        .title-path:hover {
+            color: blueviolet;
+            cursor: pointer;
+        }
+
+        .title-active {
+            color: blueviolet;
+        }
+
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+        }
+
+        .auth-item {
+            margin: 5px 10px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        input {
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            padding: 5px 10px;
+            font-size: 18px;
+            outline: none;
+            border-radius: 5px;
+        }
+
+        input::selection {
+            background-color: blueviolet;
+        }
+
+        input:focus {
+            border: 2px solid blueviolet;
+        }
+
+        button {
+            font-size: 18px;
+            outline: none;
+            border: 2px solid crimson;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            border-color: rgba(0, 0, 0, 0.25);
+            background-color: crimson;
+            color: white;
+        }
+
+        .divider {
+            height: 10px;
+        }
+
+        .divider-s {
+            height: 3px;
+        }
+
+        .hstack {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .version {
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            padding: 5px;
+            width: 100%;
+            text-align: center;
+            background-color: blueviolet;
+            color: white;
+        }
+
+        /* Small desktop */
+        @media only screen and (min-width: 600px) {
+            body {
+                width: 100%;
+                margin: 0px auto;
+            }
+
+        }
+
+        /* Medium desktop */
+        @media only screen and (min-width: 1400px) {
+            body {
+                width: 80%;
+                margin: 0px auto;
+            }
+
+        }
+
+        /* Large desktop */
+        @media only screen and (min-width: 2000px) {
+            body {
+                width: 60%;
+                margin: 0px auto;
+            }
+
+        }
+
+        @media only screen and (max-width: 600px) {}
+
+        .button {
+            color: black;
+            text-align: center;
+            background-color: white;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            padding: 15px 20px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: blueviolet;
+            color: white;
+        }
+
+        .upload-button {
+            font-size: 25px;
+            color: black;
+            text-align: center;
+
+            background-color: white;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            padding: 15px 20px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 5px;
+        }
+
+        .upload-button:hover {
+            background-color: blueviolet;
+            color: white;
+        }
+
+        .modal-container {
+            position: fixed;
+            right: 30px;
+            bottom: 60px;
+            background-color: white;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .context-menu {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            z-index: 999;
+            background-color: white;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+        }
+
+        .context-menu p {
+            width: 200px;
+            padding: 10px 15px;
+            color: black;
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        .context-menu p:hover {
+            color: blueviolet;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            width: 13% !important;
+            min-width: 13%;
+            height: 85vh;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+            margin: 10px;
+            overflow-y: scroll;
+            padding: 10px;
+            transition-duration: 300ms;
+            display: none;
+        }
+
+        .storage-space {
+            margin: 10px 0px;
+        }
+
+        progress {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        progress::-webkit-progress-bar {
+            border-radius: 5px;
+            background-color: black;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: blueviolet;
+            border-radius: 5px;
+        }
+
+        #files {
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+            overflow-y: scroll;
+            box-sizing: border-box;
+        }
+
+        #folders {
+            display: flex;
+            flex-direction: row;
+            max-width: 100%;
+            overflow-y: scroll;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+
+        .folder {
+            width: 18%;
+            height: 110px;
+            box-sizing: border-box;
+        }
+
+        .folder p {
+            width: 100%;
+            text-align: center;
+        }
+
+        .file {
+            display: flex;
+            flex-direction: row;
+            box-sizing: border-box;
+        }
+
+        .file p {
+            width: 33%;
+            text-align: left;
+        }
+
+        .small {
+            font-size: 12px;
+        }
+
+        .big {
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        h2 {
+            margin: 10px;
+            font-weight: lighter;
+        }
+
+        .text-button:hover {
+            color: blueviolet;
+            cursor: pointer;
+        }
+
+        hr {
+            margin: 0px 40% 0px 0px;
+        }
+
+        .upload-container {
+            background-color: rgba(0, 0, 0, 0.25);
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            z-index: 99;
+        }
+
+        .upload-inner {
+            background-color: white;
+            position: fixed;
+            top: 10%;
+            left: 20%;
+            right: 20%;
+            bottom: 10%;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+            padding: 10px 15px;
+            position: absolute;
+        }
+
+        #files-to-upload {
+            overflow-y: scroll;
+            max-height: 70%;
+        }
+
+        h3 {
+            font-weight: lighter;
+        }
+    </style>
+
+    <div class="content">
+
+
+
+        <div class="sidebar">
+
+            <!-- Head -->
+            <h3>Tools & settings</h3>
+            <div class="divider"></div>
+            <!-- Head end -->
+
+            <!-- Manage files -->
+            <p class="small disabled">Manage your files</p>
+            <div class="divider-s"></div>
+            <div class="divider-s"></div>
+            <p onclick="CreateUploadContainer()" class="text-button">New file</p>
+            <div class="divider-s"></div>
+            <p onclick="NewFolder()" class="text-button">New folder</p>
+            <div class="divider-s"></div>
+            <p onclick="" class="text-button">Trashcan</p>
+            <div class="divider"></div>
+            <!-- Manage files end -->
+
+            <!-- Extra's -->
+            <p class="small disabled">Extra's</p>
+            <div class="divider-s"></div>
+            <div class="divider-s"></div>
+            <p onclick="OpenContainer('shortcut')" class="text-button">View shortcuts</p>
+            <div class="divider"></div>
+            <!-- Extra's end -->
+
+            <!-- Storage space -->
+            <p class="small disabled">Storage space used (0%)</p>
+            <div class="divider-s"></div>
+            <progress value="0" max="100"></progress>
+            <div class="divider-s"></div>
+            <div class="divider"></div>
+            <!-- Storage space end -->
+        </div>
+
+        <div class="diskette">
+            <h1 id="title"></h1>
+        </div>
+
+
+    </div>
+
+    <p class="version"></p>
+    <div class="shortcut-container modal-container">
+        <h3>Keyboard shortcuts</h3>
+        <div class="divider"></div>
+
+        <p class="small disabled">Copy selection</p>
+        <p>Cmd/Ctrl + C</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Move selection</p>
+        <p>Cmd/Ctrl + X</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Paste from clipboard</p>
+        <p>Cmd/Ctrl + V</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Delete selection</p>
+        <p>Cmd/Ctrl + Backspace</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Compress selection</p>
+        <p>Cmd/Ctrl + F</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Select all</p>
+        <p>Cmd/Ctrl + A</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Deselect all</p>
+        <p>Cmd/Ctrl + D</p>
+        <div class="divider"></div>
+
+        <p class="small disabled">Select files</p>
+        <p>Cmd/Ctrl + Mouse click</p>
+        <div class="divider"></div>
+
+        <div class="divider"></div>
+        <p style="text-align: right; color: crimson;"
+            onclick="document.querySelector('.shortcut-container').style.display = 'none'" class="text-button">Close</p>
+    </div>
+
+
+
+
+
+    <script src="js/notify-js.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/filemanager.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

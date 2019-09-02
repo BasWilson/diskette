@@ -1,0 +1,17 @@
+{
+  "name": "local-drive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "drive.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.4.13",
+    "express-fileupload": "^1.1.5",
+    "fs-extra": "^8.1.0",
+    "get-folder-size": "^2.0.1"
+  }
+}
